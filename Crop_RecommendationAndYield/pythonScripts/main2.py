@@ -49,7 +49,7 @@ def yield_predict(crop, temperature, rainfall, humidity, ph):
         'Soil pH': [ph]
     })
     predicted_yield = pipeline.predict(user_data)
-    print(f"Predicted Crop Yield: {round(predicted_yield[0],2)} kg/ha")
-
-
+    return round(predicted_yield[0],2)
+temp,hum=weather_fetch("delhi")
+yield_predict("banana",temp,200,hum,5)
 
