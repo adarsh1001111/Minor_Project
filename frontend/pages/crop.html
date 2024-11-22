@@ -1,0 +1,266 @@
+<section class="crop-recommend fade-in">
+  <div class="container">
+    <h1>Crop Recommendation</h1>
+    <form class="crop-form" id="cropForm">
+      <div class="form-group">
+        <label for="nitrogen">Nitrogen:</label>
+        <input type="number" id="nitrogen" name="nitrogen" required />
+      </div>
+      <div class="form-group">
+        <label for="phosphorous">Phosphorous:</label>
+        <input type="number" id="phosphorous" name="phosphorous" required />
+      </div>
+      <div class="form-group">
+        <label for="potassium">Potassium:</label>
+        <input type="number" id="potassium" name="potassium" required />
+      </div>
+      <div class="form-group">
+        <label for="ph">pH Level:</label>
+        <input type="number" step="0.1" id="ph" name="ph" required />
+      </div>
+      <div class="form-group">
+        <label for="rainfall">Rainfall (mm):</label>
+        <input
+          type="number"
+          step="0.1"
+          id="rainfall"
+          name="rainfall"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="state">State:</label>
+        <select id="state" name="state" required>
+          <option value="">Select a state</option>
+
+          <!-- Add more states as needed -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="city">City:</label>
+        <select id="city" name="city" required>
+          <option value="">Select a city</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Get Recommendation</button>
+    </form>
+    <div id="recommendation" class="recommendation" style="display: none">
+      <h2>Recommendation:</h2>
+      <p id="recommendationText"></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+  .crop-recommend {
+    height: 100vh;
+    padding: 60px 0;
+    background-color: #f9f9f9; /* Light background to match the index page */
+    background-image: url("/frontend/images/farm_01.jpg"); /* Optional: Add plant pattern background */
+    background-size: cover;
+    background-position: center;
+  }
+
+  .crop-recommend h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    color: #4caf50; /* Green text for a plant-based theme */
+  }
+
+  .crop-form {
+    max-height: 100vh;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: "Arial", sans-serif;
+    background-image: url(""); /* Optional: Plant SVG icon in the form */
+    background-repeat: no-repeat;
+    /* background-position: top right; */
+    /* background-size: 80px; */
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .crop-form .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #4caf50; /* Green button to match theme */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .crop-form .btn:hover {
+    background-color: #45a049;
+  }
+
+  .recommendation {
+    margin-top: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .recommendation h2 {
+    color: #4caf50;
+    font-size: 1.8rem;
+  }
+
+  .recommendation p {
+    font-size: 1.2rem;
+    color: #333;
+  }
+</style>
+
+<script>
+  const stateCityMapping = {
+    "Andaman and Nicobar": ["Nicobar"],
+    "Andhra Pradesh": [
+      "Kurnool",
+      "Cuddapah",
+      "Visakhapatnam",
+      "Chittor",
+      "East Godavari",
+      "West Godavari",
+      "Guntur",
+      "Vijayanagaram",
+      "Anantapur",
+    ],
+    Assam: [
+      "Nalbari",
+      "Nagaon",
+      "Kamrup",
+      "Dhubri",
+      "Sonitpur",
+      "Cachar",
+      "Hailakandi",
+      "Goalpara",
+      "Karimganj",
+      "Lakhimpur",
+      "Barpeta",
+      "Jorhat",
+      "Kokrajhar",
+      "Bangaigaon",
+      "Darrang",
+      "Dibrugarh",
+      "Marigaon",
+      "Golaghat",
+    ],
+    Goa: ["North Goa", "South Goa"],
+    Gujarat: [
+      "Amreli",
+      "Banaskanth",
+      "Jamnagar",
+      "Mehsana",
+      "Narmada",
+      "Ahmedabad",
+      "Bharuch",
+      "Surat",
+      "Rajkot",
+      "Junagarh",
+    ],
+    Maharashtra: [
+      "Mumbai",
+      "Pune",
+      "Nagpur",
+      "Nashik",
+      "Aurangabad",
+      "Kolhapur",
+      "Thane",
+    ],
+    // Additional states and cities here...
+  };
+  const stateSelect = document.getElementById("state");
+  Object.keys(stateCityMapping).forEach((state) => {
+    const option = document.createElement("option");
+    option.value = state;
+    option.textContent = state;
+    stateSelect.appendChild(option);
+  });
+
+  // Populate cities based on selected state
+  stateSelect.addEventListener("change", function () {
+    const citySelect = document.getElementById("city");
+    citySelect.innerHTML = '<option value="">Select a city</option>';
+    const selectedState = this.value;
+    if (selectedState && stateCityMapping[selectedState]) {
+      stateCityMapping[selectedState].forEach((city) => {
+        const option = document.createElement("option");
+        option.value = city;
+        option.textContent = city;
+        citySelect.appendChild(option);
+      });
+    }
+  });
+
+  document
+    .getElementById("cropForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = {
+        nitrogen: parseFloat(document.getElementById("nitrogen").value),
+        phosphorous: parseFloat(document.getElementById("phosphorous").value),
+        potassium: parseFloat(document.getElementById("potassium").value),
+        ph: parseFloat(document.getElementById("ph").value),
+        rainfall: parseFloat(document.getElementById("rainfall").value),
+        city: document.getElementById("city").value,
+      };
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/recommend", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          document.getElementById("recommendation").style.display = "block";
+          document.getElementById("recommendationText").innerHTML = `
+                  Recommended Crop: <strong>${result.crop}</strong><br>
+                  Predicted Yield: <strong>${result.predicted_yield} kg/ha</strong>
+              `;
+        } else {
+          alert(
+            result.error || "An error occurred while processing your request."
+          );
+        }
+      } catch (error) {
+        alert("Failed to connect to the server. Please try again later.");
+      }
+    });
+</script>

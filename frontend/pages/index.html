@@ -1,0 +1,129 @@
+<head>
+  <link rel="stylesheet" href="/frontend/css/style.css" />
+</head>
+
+<header>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="#home">SoilBloom</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Our Services</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <!-- Username section (clickable for logout) -->
+    <span id="user-name" class="user-name"></span>
+    <a href="signup.html" class="signin-btn" id="auth-button"
+      >Signup / Signin</a
+    >
+  </nav>
+</header>
+
+<section class="hero fade-in home-page">
+  <div class="container">
+    <h1>SoilBloom Welcomes You!</h1>
+    <p>Get informed decisions about your farming strategy.</p>
+    <a href="#services" class="btn">I am Ready</a>
+  </div>
+</section>
+
+<section id="services" class="services">
+  <div class="container">
+    <h2 class="fade-in">Our Services</h2>
+    <div class="service-grid">
+      <div class="service-card fade-in">
+        <img
+          src="/frontend/images/plant-analysis.svg"
+          alt="Crop Recommendation"
+        />
+        <h3>Crop Recommendation</h3>
+        <p>
+          Get recommendations on the best crops to cultivate based on your
+          specific conditions.
+        </p>
+        <a href="crop.html" class="btn learn-more-btn">Learn More</a>
+      </div>
+
+      <div class="service-card fade-in">
+        <img
+          src="/frontend/images/noun-crop-disease-3541903.svg"
+          alt="Disease Prediction"
+        />
+        <h3>Disease Prediction</h3>
+        <p>Identify and treat crop diseases early to protect your harvest.</p>
+        <a href="disease.html" class="btn learn-more-btn">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  window.addEventListener("scroll", function () {
+    const heroSection = document.querySelector(".hero");
+    const servicesSection = document.querySelector("#services");
+    const servicesPosition = servicesSection.getBoundingClientRect().top;
+
+    if (servicesPosition < window.innerHeight / 1.5) {
+      heroSection.classList.add("scrolled");
+    } else {
+      heroSection.classList.remove("scrolled");
+    }
+  });
+</script>
+<script>
+  // Check if a user is logged in by looking for their name in localStorage
+  document.addEventListener("DOMContentLoaded", function () {
+    const userName = localStorage.getItem("userName");
+    const authButton = document.getElementById("auth-button");
+    const userNameDisplay = document.getElementById("user-name");
+    const learnMoreButtons = document.querySelectorAll(".learn-more-btn"); // Select all "Learn More" buttons
+
+    if (userName) {
+      // If user is logged in, display their name and update button texts
+      authButton.textContent = "";
+      authButton.href = "#"; // Make the name non-clickable
+      authButton.classList.remove("signin-btn"); // Optional: Remove button styling
+
+      // Update user name display in the navbar
+      userNameDisplay.textContent = `Hello, ${userName}`;
+
+      // Make the username clickable to logout
+      userNameDisplay.style.cursor = "pointer"; // Change cursor to pointer to indicate it's clickable
+      userNameDisplay.addEventListener("click", logout);
+
+      // Update both "Learn More" buttons text
+      learnMoreButtons.forEach(function (button) {
+        button.textContent = "Explore Services"; // Change text for all Learn More buttons
+      });
+    } else {
+      // If no user is logged in, show the default text
+      userNameDisplay.textContent = ""; // Clear the user name display
+      authButton.textContent = "Signup / Signin"; // Restore the original text
+      authButton.href = "signup.html"; // Restore the href to signup page
+      authButton.classList.add("signin-btn"); // Restore the button styling
+
+      // Reset both "Learn More" buttons text to default
+      learnMoreButtons.forEach(function (button) {
+        button.textContent = "Learn More"; // Reset text for all Learn More buttons
+      });
+    }
+
+    // Logout function
+    function logout() {
+      // Clear the username from localStorage
+      localStorage.removeItem("userName");
+
+      // Update the UI to reflect the logged-out state
+      userNameDisplay.textContent = ""; // Clear the user name display
+      authButton.textContent = "Signup / Signin"; // Reset to Signup/Signin button
+      authButton.href = "signup.html"; // Redirect to signup page
+      authButton.classList.add("signin-btn"); // Re-add signin button styling
+
+      // Reset "Learn More" buttons text to default
+      learnMoreButtons.forEach(function (button) {
+        button.textContent = "Learn More";
+      });
+    }
+  });
+</script>

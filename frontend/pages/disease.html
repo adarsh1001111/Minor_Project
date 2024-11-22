@@ -1,0 +1,153 @@
+<section class="disease-predict fade-in">
+  <div class="container">
+    <h1>Disease Prediction</h1>
+    <form class="disease-form" id="diseaseForm">
+      <div class="form-group">
+        <label for="cropImage">Upload Crop Image:</label>
+        <input
+          type="file"
+          id="cropImage"
+          name="cropImage"
+          accept="image/*"
+          required
+        />
+      </div>
+      <div id="imagePreview" class="image-preview"></div>
+      <button type="submit" class="btn">Predict Disease</button>
+    </form>
+    <div id="prediction" class="prediction" style="display: none">
+      <h2>Prediction:</h2>
+      <p id="predictionText"></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .disease-predict {
+    padding: 60px 0;
+    background-color: #e8f5e9; /* Light green background */
+    background-image: url("/images/leaf-pattern.svg"); /* Add a subtle plant leaf pattern */
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .disease-form {
+    max-width: 100%;
+    width: 100%;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: "Arial", sans-serif;
+    background-image: url("/images/plant.svg");
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 80px;
+    box-sizing: border-box;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .form-group input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  .disease-form .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .disease-form .btn:hover {
+    background-color: #45a049;
+  }
+
+  .image-preview {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .image-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 5px;
+  }
+
+  .prediction {
+    margin-top: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .prediction h2 {
+    color: #4caf50;
+    font-size: 1.8rem;
+  }
+
+  .prediction p {
+    font-size: 1.2rem;
+    color: #333;
+  }
+</style>
+
+<script>
+  document.getElementById("cropImage").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        const imagePreview = document.getElementById("imagePreview");
+        imagePreview.innerHTML = "";
+        imagePreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document
+    .getElementById("diseaseForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      // In a real application, you would send the image to your backend for processing
+      // For now, we'll just show a mock prediction
+      document.getElementById("prediction").style.display = "block";
+      document.getElementById("predictionText").textContent =
+        "The image suggests that your crop may be affected by leaf blight. We recommend applying a fungicide and ensuring proper irrigation.";
+    });
+</script>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#f4f8f0"/>
+  <path d="M0 0 L 1920 0 L 1920 1080 L 0 1080 Z" fill="url(#grain)" opacity="0.1"/>
+  <path d="M480 1080 C 480 720, 1440 720, 1440 1080" fill="none" stroke="#c8e6c9" stroke-width="5"/>
+  <path d="M0 1080 C 0 720, 960 720, 1920 1080" fill="none" stroke="#a5d6a7" stroke-width="5"/>
+  <circle cx="480" cy="240" r="160" fill="#81c784" opacity="0.2"/>
+  <circle cx="1440" cy="240" r="160" fill="#66bb6a" opacity="0.2"/>
+  <defs>
+    <pattern id="grain" patternUnits="userSpaceOnUse" width="200" height="200">
+      <rect width="200" height="200" fill="#a5d6a7" opacity="0.1"/>
+      <path d="M 0 0 L 200 200 M 200 0 L 0 200" stroke="#81c784" stroke-width="1" opacity="0.2"/>
+    </pattern>
+  </defs>
+</svg>
